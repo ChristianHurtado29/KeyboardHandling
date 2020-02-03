@@ -18,6 +18,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var pursuitLogoCenterY: NSLayoutConstraint!
     
+    private var originalYConstraint: NSLayoutConstraint!
+    
     private var keyboardIsVisible = false
     
     override func viewDidLoad() {
@@ -71,9 +73,14 @@ class ViewController: UIViewController {
     
     private func moveKeyboardUp(_ height: CGFloat) {
         if keyboardIsVisible { return }
-        pursuitLogoCenterY.constant -= height
+        originalYConstraint = pursuitLogoCenterY
+        pursuitLogoCenterY.constant -= (height * 0.80)
         keyboardIsVisible = true
-
+    }
+    
+    private func resetUI() {
+        keyboardIsVisible = false
+        pursuitLogoCenterY.constant = 0
     }
 
 }
@@ -82,6 +89,7 @@ class ViewController: UIViewController {
 extension ViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        resetUI()
         return true
     }
 }
