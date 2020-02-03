@@ -24,8 +24,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pulsateLogo()
         registerForKeyboardNotifications()
-        
         usernameTextField.delegate = self
         passwordTextField.delegate = self
     }
@@ -64,7 +64,7 @@ class ViewController: UIViewController {
     @objc private func keyboardWillHide(_ notification: NSNotification) {
         
         // TODO: Complete
-        
+        resetUI()
         
         print("KeyboardWillHide")
         print(notification.userInfo)
@@ -74,13 +74,31 @@ class ViewController: UIViewController {
     private func moveKeyboardUp(_ height: CGFloat) {
         if keyboardIsVisible { return }
         originalYConstraint = pursuitLogoCenterY
+        
+        print("OriginalYConstraint: \(originalYConstraint.constant)")
         pursuitLogoCenterY.constant -= (height * 0.80)
         keyboardIsVisible = true
+        
+        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 10.0, options: [], animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     private func resetUI() {
         keyboardIsVisible = false
-        pursuitLogoCenterY.constant = 0
+        // -314 = 0, +314
+        print("OriginalYConstraint: \(originalYConstraint.constant)")
+        pursuitLogoCenterY.constant -= originalYConstraint.constant
+        UIView.animate(withDuration: 0.5){
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
+    private func pulsateLogo() {
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.repeat, .autoreverse], animations: {
+            self.pursuitLogo.transform = CGAffineTransform(scaleX: 3.0, y: 3.0)
+        }, completion: nil)
     }
 
 }
@@ -89,7 +107,7 @@ class ViewController: UIViewController {
 extension ViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        resetUI()
+    //    resetUI()
         return true
     }
 }
