@@ -23,6 +23,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerForKeyboardNotifications()
+        
+        usernameTextField.delegate = self
+        passwordTextField.delegate = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,3 +78,10 @@ class ViewController: UIViewController {
 
 }
 
+
+extension ViewController: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
