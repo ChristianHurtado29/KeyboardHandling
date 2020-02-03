@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var pursuitLogoCenterY: NSLayoutConstraint!
     
-    
+    private var keyboardIsVisible = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,17 +52,25 @@ class ViewController: UIViewController {
             return
         }
         print("keyboard frame is \(keyboardFrame)")
+        moveKeyboardUp(keyboardFrame.size.height)
     
     }
     
     @objc private func keyboardWillHide(_ notification: NSNotification) {
+        
+        // TODO: Complete
+        
+        
         print("KeyboardWillHide")
         print(notification.userInfo)
     }
     
     
     private func moveKeyboardUp(_ height: CGFloat) {
+        if keyboardIsVisible { return }
         pursuitLogoCenterY.constant -= height
+        keyboardIsVisible = true
+
     }
 
 }
